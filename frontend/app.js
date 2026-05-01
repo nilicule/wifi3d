@@ -119,14 +119,28 @@ document.getElementById('pw-toggle').addEventListener('click', () => {
 });
 
 // Password strength meter
+function calcPasswordStrength(v) {
+  if (!v) return 0;
+  let score = 0;
+  if (v.length >= 8)  score++;                              // meets WPA minimum
+  if (v.length >= 14) score++;                              // good length
+  if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;         // mixed case
+  if (/[0-9]/.test(v)) score++;                             // has digits
+  if (/[^A-Za-z0-9]/.test(v)) score++;                     // has symbols
+  return Math.min(4, score);
+}
+
 document.getElementById('password').addEventListener('input', e => {
-  const v = e.target.value;
-  const strength = v.length === 0 ? 0 : Math.min(4, Math.floor(v.length / 4) + 1);
-  const colors = ['', '#ef4444', '#f59e0b', '#84cc16', '#10b981'];
+  const strength = calcPasswordStrength(e.target.value);
+  const colors  = ['', '#ef4444', '#f59e0b', '#84cc16', '#10b981'];
+  const labels  = ['', 'Weak', 'Fair', 'Good', 'Strong'];
   for (let i = 1; i <= 4; i++) {
     document.getElementById(`str-${i}`).style.background =
       i <= strength ? colors[strength] : '#374151';
   }
+  const lbl = document.getElementById('str-label');
+  lbl.textContent = e.target.value ? labels[strength] : '';
+  lbl.style.color = colors[strength] || '';
 });
 
 // Size presets

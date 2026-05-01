@@ -1,6 +1,8 @@
 /* Toggle switch state management */
-input[type="checkbox"]:checked ~ .toggle-bg { background-color: #10b981; }
+input[type="checkbox"]:checked ~ .toggle-bg { background-color: #10b981 !important; }
 input[type="checkbox"]:checked ~ .toggle-dot { transform: translateX(1rem); }
+.toggle-bg { outline: 2px solid transparent; transition: outline-color 0.2s; }
+input[type="checkbox"]:focus-visible ~ .toggle-bg { outline-color: #10b981; outline-offset: 2px; }
 
 /* Accordion open state */
 .accordion-body:not(.open) { display: none !important; }
@@ -8,3 +10,10 @@ input[type="checkbox"]:checked ~ .toggle-dot { transform: translateX(1rem); }
 
 /* Smooth canvas */
 canvas { display: block; }
+
+/* Password strength bars — not using bg-gray-700 to avoid the !important light-mode override */
+.str-bar { background-color: #374151; }
+
+/* Footer heart */
+.footer-heart { transition: color 0.2s; }
+.footer-link:hover .footer-heart { color: #ef4444; }

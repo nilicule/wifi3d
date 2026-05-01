@@ -94,15 +94,26 @@
               class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-600 focus:outline-none focus:border-accent transition-colors" />
           </label>
 
-          <!-- Open network toggle -->
-          <label class="flex items-center gap-3 cursor-pointer select-none">
-            <div class="relative">
-              <input id="open-network" type="checkbox" class="sr-only" />
-              <div class="toggle-bg w-10 h-6 bg-gray-700 rounded-full transition-colors"></div>
-              <div class="toggle-dot absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform"></div>
-            </div>
-            <span class="text-sm text-gray-300">Open network (no password)</span>
-          </label>
+          <!-- Open / Hidden toggles on one row -->
+          <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+              <div class="relative">
+                <input id="open-network" type="checkbox" class="sr-only" />
+                <div class="toggle-bg w-10 h-6 bg-gray-700 rounded-full transition-colors duration-200"></div>
+                <div class="toggle-dot absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
+              </div>
+              <span class="text-sm text-gray-300">Open network</span>
+            </label>
+
+            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+              <div class="relative">
+                <input id="hidden-network" type="checkbox" class="sr-only" />
+                <div class="toggle-bg w-10 h-6 bg-gray-700 rounded-full transition-colors duration-200"></div>
+                <div class="toggle-dot absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"></div>
+              </div>
+              <span class="text-sm text-gray-300">Hidden</span>
+            </label>
+          </div>
 
           <!-- Password -->
           <div id="password-row" class="flex flex-col gap-1.5 text-sm">
@@ -118,23 +129,16 @@
               </button>
             </div>
             <!-- Strength meter -->
-            <div class="flex gap-1 h-1">
-              <div id="str-1" class="flex-1 rounded-full bg-gray-700 transition-colors"></div>
-              <div id="str-2" class="flex-1 rounded-full bg-gray-700 transition-colors"></div>
-              <div id="str-3" class="flex-1 rounded-full bg-gray-700 transition-colors"></div>
-              <div id="str-4" class="flex-1 rounded-full bg-gray-700 transition-colors"></div>
+            <div class="flex items-center gap-2">
+              <div class="flex gap-1 flex-1 h-1.5">
+                <div id="str-1" class="str-bar flex-1 rounded-full transition-colors duration-300"></div>
+                <div id="str-2" class="str-bar flex-1 rounded-full transition-colors duration-300"></div>
+                <div id="str-3" class="str-bar flex-1 rounded-full transition-colors duration-300"></div>
+                <div id="str-4" class="str-bar flex-1 rounded-full transition-colors duration-300"></div>
+              </div>
+              <span id="str-label" class="text-xs text-gray-600 w-12 text-right transition-colors duration-300"></span>
             </div>
           </div>
-
-          <!-- Hidden network toggle -->
-          <label class="flex items-center gap-3 cursor-pointer select-none">
-            <div class="relative">
-              <input id="hidden-network" type="checkbox" class="sr-only" />
-              <div class="toggle-bg w-10 h-6 bg-gray-700 rounded-full transition-colors"></div>
-              <div class="toggle-dot absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform"></div>
-            </div>
-            <span class="text-sm text-gray-300">Hidden network</span>
-          </label>
 
           <!-- Privacy notice -->
           <p class="text-xs text-gray-500 bg-gray-800 rounded-lg px-3 py-2 border border-gray-700">
@@ -250,7 +254,7 @@
         <span class="text-sm font-semibold text-gray-400 uppercase tracking-widest">Preview</span>
         <span id="drag-hint" class="text-xs text-gray-600 italic transition-opacity duration-500">drag to rotate</span>
       </div>
-      <div id="canvas-container" class="flex-1 min-h-[400px] bg-gray-900 rounded-xl border border-gray-800 relative overflow-hidden">
+      <div id="canvas-container" class="flex-1 min-h-[300px] max-h-[480px] bg-gray-900 rounded-xl border border-gray-800 relative overflow-hidden">
         <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
           <p class="text-gray-600 text-lg font-medium">Your WiFi<span class="text-gray-700">3D</span> preview</p>
           <p class="text-gray-700 text-sm mt-1">Fill in details to begin</p>
@@ -259,6 +263,13 @@
     </section>
 
   </main>
+
+  <footer class="border-t border-gray-800 py-4 text-center">
+    <a href="https://github.com/nilicule/wifi3d" target="_blank" rel="noopener"
+       class="footer-link text-xs text-gray-600 hover:text-gray-400 transition-colors duration-200">
+      built with <span class="footer-heart">♥</span> source on GitHub
+    </a>
+  </footer>
 
   <script type="module" src="/static/app.js"></script>
 </body>
