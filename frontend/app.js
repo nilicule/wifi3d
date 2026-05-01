@@ -208,7 +208,7 @@ function updateExportButtons() {
 }
 
 async function doExport(format) {
-  const res = await fetch('/api/generate', {
+  const res = await fetch('api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...state, format }),
@@ -262,7 +262,7 @@ async function fetchPreview() {
   }
   if (emptyState) emptyState.style.display = 'none';
   try {
-    const res = await fetch('/api/preview', {
+    const res = await fetch('api/preview', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state),

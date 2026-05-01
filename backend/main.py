@@ -1,24 +1,35 @@
 from __future__ import annotations
+import os
 import re
 from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import Response, FileResponse
+from fastapi.responses import Response, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from backend.models import GenerateRequest, PreviewMesh
 from backend.geometry import build_mesh
 from backend.stl_export import export_stl
 from backend.threemf_export import export_3mf
 
-app = FastAPI(title="WiFi3D")
+# Strip trailing slash; empty string means serve from root.
+_ROOT_PATH = os.getenv("ROOT_PATH", "").rstrip("/")
+
+app = FastAPI(title="WiFi3D", root_path=_ROOT_PATH)
 
 _frontend = Path(__file__).parent.parent / "frontend"
 if _frontend.exists() and any(_frontend.iterdir()):
     app.mount("/static", StaticFiles(directory=str(_frontend)), name="static")
 
+_INDEX_HTML = (_frontend / "index.html").read_text()
+
 
 @app.get("/")
-async def index() -> FileResponse:
-    return FileResponse(str(_frontend / "index.html"))
+async def index() -> HTMLResponse:
+    html = _INDEX_HTML
+    if _ROOT_PATH:
+        # Inject <base> so all relative asset/API paths resolve under the subdir.
+        base_tag = f'<base href="{_ROOT_PATH}/">'
+        html = html.replace("<head>", f"<head>\n  {base_tag}", 1)
+    return HTMLResponse(content=html)
 
 
 @app.post("/api/generate")
