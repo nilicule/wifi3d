@@ -16,7 +16,7 @@ const state = {
 // ── Theme ─────────────────────────────────────────────────────────────────────
 const html = document.documentElement;
 const savedTheme = localStorage.getItem('wifi3d-theme');
-if (savedTheme === 'light') html.classList.remove('dark');
+if (savedTheme === 'dark') html.classList.add('dark');
 
 document.getElementById('theme-toggle')?.addEventListener('click', () => {
   const dark = html.classList.toggle('dark');
