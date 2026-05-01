@@ -1,4 +1,3 @@
-import pytest
 from backend.qr import encode_wifi_string, get_qr_matrix
 
 

@@ -1,5 +1,4 @@
 import struct
-import pytest
 from backend.geometry import build_mesh
 from backend.models import GenerateRequest
 from backend.stl_export import export_stl

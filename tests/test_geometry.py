@@ -1,5 +1,3 @@
-import numpy as np
-import pytest
 from backend.geometry import build_mesh, MeshPair
 from backend.models import GenerateRequest
 
