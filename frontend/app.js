@@ -10,7 +10,6 @@ const state = {
   header_text: '',
   sub_label: '',
   wifi_icon: true,
-  desk_stand_tab: false,
 };
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
@@ -111,10 +110,6 @@ document.getElementById('wifi-icon').addEventListener('change', e => {
   schedulePreview();
 });
 
-document.getElementById('desk-stand').addEventListener('change', e => {
-  state.desk_stand_tab = e.target.checked;
-  schedulePreview();
-});
 
 // Password show/hide
 document.getElementById('pw-toggle').addEventListener('click', () => {

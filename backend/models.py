@@ -15,7 +15,6 @@ class GenerateRequest(BaseModel):
     header_text: str = Field(default="", max_length=16)
     sub_label: str = Field(default="", max_length=16)
     wifi_icon: bool = True
-    desk_stand_tab: bool = False
     format: Literal["stl", "3mf"] = "stl"
 
     @field_validator("header_text", "sub_label")

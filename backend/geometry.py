@@ -125,12 +125,6 @@ def build_mesh(req: GenerateRequest) -> MeshPair:
     qr_x_start = PADDING
 
     plate_parts = [_box_mesh(0, 0, 0, plate_w, plate_h, PLATE_THICKNESS)]
-
-    if req.desk_stand_tab:
-        tab_w = plate_w * 0.4
-        tab_x = (plate_w - tab_w) / 2
-        plate_parts.append(_box_mesh(tab_x, -6.0, 0, tab_x + tab_w, 0, PLATE_THICKNESS))
-
     plate_verts, plate_faces = _merge(plate_parts)
 
     mod_parts: list[tuple[np.ndarray, np.ndarray]] = []
