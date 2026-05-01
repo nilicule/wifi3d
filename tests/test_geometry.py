@@ -38,7 +38,7 @@ def test_nonzero_triangles():
 
 
 def test_with_header_text():
-    mesh = build_mesh(_req(header_text="ROOM 204"))
+    mesh = build_mesh(_req(header_text="ROOM 641A"))
     mesh_plain = build_mesh(_req())
     plain_h = mesh_plain.plate_verts[:, 1].max() - mesh_plain.plate_verts[:, 1].min()
     text_h = mesh.plate_verts[:, 1].max() - mesh.plate_verts[:, 1].min()
