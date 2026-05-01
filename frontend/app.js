@@ -25,18 +25,22 @@ document.getElementById('theme-toggle')?.addEventListener('click', () => {
 });
 
 // ── Color swatches ────────────────────────────────────────────────────────────
-const BASE_COLORS = ['#ffffff', '#f5f5dc', '#1a1a2e', '#2d3748', '#7f1d1d'];
-const MOD_COLORS  = ['#1a1a1a', '#10b981', '#3b82f6', '#ef4444', '#f59e0b'];
+const PALETTE = ['#ffffff', '#9ca3af', '#fbbf24', '#ef4444', '#f97316', '#3b82f6', '#22c55e', '#1a1a1a'];
+const BASE_COLORS = PALETTE;
+const MOD_COLORS  = PALETTE;
 
 function makeSwatch(color, swatchContainer, stateKey) {
   const btn = document.createElement('button');
   btn.style.background = color;
   btn.className = 'w-7 h-7 rounded-md border-2 transition-all';
-  btn.style.borderColor = state[stateKey] === color ? '#10b981' : 'transparent';
+  const selected = state[stateKey] === color;
+  btn.style.borderColor = selected ? '#10b981' : 'rgba(156,163,175,0.5)';
   btn.onclick = () => {
     state[stateKey] = color;
     updateColorPreview();
-    swatchContainer.querySelectorAll('button').forEach(b => { b.style.borderColor = 'transparent'; });
+    swatchContainer.querySelectorAll('button').forEach(b => {
+      b.style.borderColor = 'rgba(156,163,175,0.5)';
+    });
     btn.style.borderColor = '#10b981';
     schedulePreview();
   };
