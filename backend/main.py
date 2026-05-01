@@ -13,7 +13,7 @@ from backend.threemf_export import export_3mf
 # Strip trailing slash; empty string means serve from root.
 _ROOT_PATH = os.getenv("ROOT_PATH", "").rstrip("/")
 
-app = FastAPI(title="WiFi3D", root_path=_ROOT_PATH)
+app = FastAPI(title="WiFi3D")
 
 _frontend = Path(__file__).parent.parent / "frontend"
 if _frontend.exists() and any(_frontend.iterdir()):
