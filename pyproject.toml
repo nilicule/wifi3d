@@ -1,0 +1,24 @@
+[project]
+name = "wifi3d"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.136.1",
+    "numpy>=2.4.4",
+    "numpy-stl>=3.2.0",
+    "pillow>=12.2.0",
+    "pydantic>=2.13.3",
+    "qrcode[pil]>=8.2",
+    "uvicorn[standard]>=0.46.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "ruff>=0.15.12",
+]
+
+[tool.ruff]
+line-length = 100
