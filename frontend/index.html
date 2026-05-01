@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,35 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: { extend: { colors: { accent: '#10b981' } } }
     }
   </script>
+  <style>
+    /* ── Light mode overrides ─────────────────────────────────────────────── */
+    html:not(.dark) body               { background-color: #f9fafb !important; color: #111827 !important; }
+    html:not(.dark) .bg-gray-950       { background-color: #f9fafb !important; }
+    html:not(.dark) .bg-gray-900       { background-color: #ffffff !important; }
+    html:not(.dark) .bg-gray-800       { background-color: #f3f4f6 !important; }
+    html:not(.dark) .bg-gray-700       { background-color: #e5e7eb !important; }
+    html:not(.dark) .border-gray-800   { border-color: #e5e7eb !important; }
+    html:not(.dark) .border-gray-700   { border-color: #d1d5db !important; }
+    html:not(.dark) .text-gray-100     { color: #111827 !important; }
+    html:not(.dark) .text-gray-300     { color: #374151 !important; }
+    html:not(.dark) .text-gray-400     { color: #6b7280 !important; }
+    html:not(.dark) .text-gray-500     { color: #6b7280 !important; }
+    html:not(.dark) .text-gray-600     { color: #9ca3af !important; }
+    html:not(.dark) .text-gray-700     { color: #6b7280 !important; }
+    html:not(.dark) .text-white        { color: #111827 !important; }
+    html:not(.dark) .placeholder-gray-600::placeholder { color: #9ca3af !important; }
+    html:not(.dark) input, html:not(.dark) textarea    { color: #111827 !important; }
+
+    /* ── Theme icon visibility ────────────────────────────────────────────── */
+    html.dark  .icon-sun  { display: block; }
+    html.dark  .icon-moon { display: none;  }
+    html:not(.dark) .icon-sun  { display: none;  }
+    html:not(.dark) .icon-moon { display: block; }
+  </style>
   <script defer src="https://plausible.io/js/plausible.js" data-domain="wifi3d.app"></script>
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
@@ -20,9 +46,21 @@
     <a href="/" class="text-xl font-semibold tracking-tight select-none">
       WiFi<span class="text-accent">3D</span>
     </a>
-    <nav class="flex gap-6 text-sm text-gray-400">
+    <nav class="flex items-center gap-5 text-sm text-gray-400">
       <span class="cursor-not-allowed opacity-50">No printer? <span class="text-xs">(Coming Soon!)</span></span>
       <a href="#" class="hover:text-accent transition-colors">MakerWorld Model</a>
+      <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-gray-800 transition-colors" title="Toggle light/dark mode">
+        <!-- Sun — visible in dark mode -->
+        <svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <!-- Moon — visible in light mode -->
+        <svg class="icon-moon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
     </nav>
   </header>
 
@@ -37,7 +75,9 @@
       <div id="step1" class="bg-gray-900 rounded-xl border border-gray-800">
         <button class="accordion-btn w-full text-left px-5 py-4 flex items-center justify-between font-semibold" data-target="step1-body">
           <span><span class="text-accent mr-2">1</span>Network Details</span>
-          <svg class="accordion-chevron w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          <svg class="accordion-chevron w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
         </button>
         <div id="step1-body" class="accordion-body px-5 pb-5 flex flex-col gap-4">
 
@@ -91,17 +131,19 @@
           </label>
 
           <!-- Privacy notice -->
-          <p class="text-xs text-gray-500 bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700/50">
+          <p class="text-xs text-gray-500 bg-gray-800 rounded-lg px-3 py-2 border border-gray-700">
             Your credentials are only used to generate the QR code and are never stored, logged, or shared.
           </p>
         </div>
       </div>
 
-      <!-- Step 2: Styling -->
+      <!-- Step 2: Styling (collapsed by default) -->
       <div id="step2" class="bg-gray-900 rounded-xl border border-gray-800">
         <button class="accordion-btn w-full text-left px-5 py-4 flex items-center justify-between font-semibold" data-target="step2-body">
-          <span><span class="text-accent mr-2">2</span>Styling</span>
-          <svg class="accordion-chevron w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          <span><span class="text-accent mr-2">2</span>Styling <span class="text-gray-600 text-xs font-normal ml-1">(optional)</span></span>
+          <svg class="accordion-chevron w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
         </button>
         <div id="step2-body" class="accordion-body px-5 pb-5 flex flex-col gap-4">
 
@@ -173,7 +215,7 @@
           </div>
 
           <!-- Print specs -->
-          <p class="text-xs text-gray-600 bg-gray-800/30 rounded px-3 py-2">
+          <p class="text-xs text-gray-600 bg-gray-800 rounded px-3 py-2">
             2mm base + 1mm raised modules · 0.12–0.2mm layers · 100% infill
           </p>
         </div>
@@ -200,9 +242,9 @@
     <section class="flex-1 flex flex-col gap-2">
       <div class="flex items-center justify-between">
         <span class="text-sm font-semibold text-gray-400 uppercase tracking-widest">Preview</span>
-        <span id="drag-hint" class="text-xs text-gray-600 italic">drag to rotate</span>
+        <span id="drag-hint" class="text-xs text-gray-600 italic transition-opacity duration-500">drag to rotate</span>
       </div>
-      <div id="canvas-container" class="flex-1 min-h-[400px] lg:min-h-0 bg-gray-900 rounded-xl border border-gray-800 relative overflow-hidden">
+      <div id="canvas-container" class="flex-1 min-h-[400px] bg-gray-900 rounded-xl border border-gray-800 relative overflow-hidden">
         <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
           <p class="text-gray-600 text-lg font-medium">Your WiFi<span class="text-gray-700">3D</span> preview</p>
           <p class="text-gray-700 text-sm mt-1">Fill in details to begin</p>
