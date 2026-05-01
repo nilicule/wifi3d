@@ -90,13 +90,15 @@ def _text_to_boxes(
 
 
 _WIFI_ICON = [
-    "0000000",
-    "0111110",
-    "1000001",
-    "0011100",
-    "0100010",
-    "0001000",
-    "0001000",
+    "011111110",   # outer arc
+    "100000001",
+    "000000000",
+    "001111100",   # middle arc
+    "010000010",
+    "000000000",
+    "000111000",   # inner arc
+    "000000000",
+    "000010000",   # dot
 ]
 
 
@@ -135,20 +137,30 @@ def build_mesh(req: GenerateRequest) -> MeshPair:
     z_base = PLATE_THICKNESS
     z_top = PLATE_THICKNESS + MODULE_HEIGHT
 
+    # Centre of the QR area and half-width of the clear zone for the wifi icon
+    icon_cx = qr_x_start + qr_size / 2
+    icon_cy = qr_y_start + qr_size / 2
+    # 25% linear clearance is safe with H-level error correction (30% data recovery)
+    clear_half = (qr_size * 0.25) / 2 if req.wifi_icon else 0.0
+
     for row_idx, row in enumerate(matrix):
         for col_idx, dark in enumerate(row):
             if dark:
                 x0 = qr_x_start + col_idx * cell_size
                 y0 = qr_y_start + (n_cells - 1 - row_idx) * cell_size
+                if req.wifi_icon:
+                    mod_cx = x0 + cell_size / 2
+                    mod_cy = y0 + cell_size / 2
+                    if abs(mod_cx - icon_cx) < clear_half and abs(mod_cy - icon_cy) < clear_half:
+                        continue
                 mod_parts.append(_box_mesh(x0, y0, z_base, x0 + cell_size, y0 + cell_size, z_top))
 
     if req.wifi_icon:
         icon_bm = _get_wifi_bitmap()
         icon_rows, icon_cols = icon_bm.shape
-        icon_cell_count = max(5, int(n_cells * 0.18))
-        icon_size_mm = icon_cell_count * cell_size
-        icon_x = qr_x_start + (qr_size - icon_size_mm) / 2
-        icon_y = qr_y_start + (qr_size - icon_size_mm) / 2
+        icon_size_mm = clear_half * 2 * 0.8
+        icon_x = icon_cx - icon_size_mm / 2
+        icon_y = icon_cy - icon_size_mm / 2
         icon_pixel_mm = icon_size_mm / max(icon_rows, icon_cols)
         mod_parts.extend(_text_to_boxes(icon_bm, icon_x, icon_y, z_base, z_top, icon_pixel_mm))
 

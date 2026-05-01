@@ -37,6 +37,14 @@
     html:not(.dark) .icon-sun  { display: none;  }
     html:not(.dark) .icon-moon { display: block; }
   </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/"
+    }
+  }
+  </script>
   <script defer src="https://plausible.io/js/plausible.js" data-domain="wifi3d.app"></script>
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
@@ -47,8 +55,6 @@
       WiFi<span class="text-accent">3D</span>
     </a>
     <nav class="flex items-center gap-5 text-sm text-gray-400">
-      <span class="cursor-not-allowed opacity-50">No printer? <span class="text-xs">(Coming Soon!)</span></span>
-      <a href="#" class="hover:text-accent transition-colors">MakerWorld Model</a>
       <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-gray-800 transition-colors" title="Toggle light/dark mode">
         <!-- Sun — visible in dark mode -->
         <svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,7 +232,7 @@
         <button id="btn-stl" disabled
           class="export-btn flex-1 py-3 rounded-xl font-semibold text-sm bg-accent text-white opacity-40 cursor-not-allowed transition-all">
           EXPORT STL
-          <span class="block text-xs font-normal opacity-80">Ready to print</span>
+          <span class="block text-xs font-normal opacity-80">ZIP · dual-color</span>
         </button>
         <button id="btn-3mf" disabled
           class="export-btn flex-1 py-3 rounded-xl font-semibold text-sm border border-accent text-accent opacity-40 cursor-not-allowed transition-all">

@@ -3,7 +3,7 @@ input[type="checkbox"]:checked ~ .toggle-bg { background-color: #10b981; }
 input[type="checkbox"]:checked ~ .toggle-dot { transform: translateX(1rem); }
 
 /* Accordion open state */
-.accordion-body { display: none; }
+.accordion-body:not(.open) { display: none !important; }
 .accordion-body.open { display: flex; }
 
 /* Smooth canvas */

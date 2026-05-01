@@ -179,9 +179,10 @@ async function doExport(format) {
   if (!res.ok) return;
   const blob = await res.blob();
   const slug = state.ssid.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 20);
+  const ext = format === 'stl' ? 'zip' : format;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `wifi3d-${slug}.${format}`;
+  a.download = `wifi3d-${slug}.${ext}`;
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -241,6 +242,7 @@ let _scene = null;
 let _camera = null;
 let _controls = null;
 let _previewGroup = null;
+let _pendingData = null;
 
 function updateThreeBackground() {
   if (!_scene || !_THREE) return;
@@ -261,7 +263,11 @@ function clearPreview() {
 }
 
 function renderPreview(data) {
-  if (!_THREE || !_scene) return;
+  if (!_THREE || !_scene) {
+    _pendingData = data;
+    return;
+  }
+  _pendingData = null;
 
   if (_previewGroup) {
     _scene.remove(_previewGroup);
@@ -298,15 +304,18 @@ function renderPreview(data) {
     _previewGroup.add(new _THREE.Mesh(buildGeo(data.module_vertices, data.module_faces), modMat));
   }
 
-  // Centre and auto-frame
+  // Geometry uses Z-up; rotate so the plate lies flat on the grid (Y-up world)
+  _previewGroup.rotation.x = -Math.PI / 2;
+
+  // Centre in XZ and sit the bottom face on y=0
   const box = new _THREE.Box3().setFromObject(_previewGroup);
   const center = box.getCenter(new _THREE.Vector3());
-  _previewGroup.position.sub(center);
+  _previewGroup.position.set(-center.x, -box.min.y, -center.z);
   _scene.add(_previewGroup);
 
   const size = box.getSize(new _THREE.Vector3()).length();
-  const dist = size * 1.4;
-  _camera.position.set(dist * 0.7, -dist * 0.7, dist * 0.8);
+  const dist = size * 1.2;
+  _camera.position.set(dist * 0.6, dist * 0.55, dist * 0.8);
   _controls.target.set(0, 0, 0);
   _controls.update();
 }
@@ -314,8 +323,8 @@ function renderPreview(data) {
 async function initThree() {
   const container = document.getElementById('canvas-container');
 
-  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js');
-  const { OrbitControls } = await import('https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/OrbitControls.js');
+  const THREE = await import('three');
+  const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
   _THREE = THREE;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -326,7 +335,7 @@ async function initThree() {
   updateThreeBackground();
 
   _camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
-  _camera.position.set(80, -80, 100);
+  _camera.position.set(60, 55, 80);
 
   _controls = new OrbitControls(_camera, renderer.domElement);
   _controls.enableDamping = true;
@@ -347,7 +356,6 @@ async function initThree() {
   const dark = html.classList.contains('dark');
   const gridColor = dark ? 0x1f2937 : 0xe5e7eb;
   const grid = new THREE.GridHelper(200, 20, gridColor, gridColor);
-  grid.position.y = -2;
   _scene.add(grid);
 
   // Responsive canvas — min 400px height guard
@@ -373,6 +381,10 @@ async function initThree() {
     const hint = document.getElementById('drag-hint');
     if (hint) hint.style.opacity = '0';
   });
+
+  if (_pendingData) {
+    renderPreview(_pendingData);
+  }
 }
 
 initThree().catch(e => {

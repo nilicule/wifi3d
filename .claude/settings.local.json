@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(uv run *)",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "Bash(python3 *)",
+      "Bash(uv add *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/)",
+      "Bash(curl -s -X POST http://localhost:8000/api/preview -H 'Content-Type: application/json' -d '{\"ssid\":\"HomeNetwork\",\"password\":\"mypass123\",\"auth_type\":\"WPA\"}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/generate -H 'Content-Type: application/json' -d '{\"ssid\":\"HomeNetwork\",\"password\":\"mypass123\",\"auth_type\":\"WPA\",\"format\":\"stl\"}' -o /tmp/wifi3d-test.stl -w '%{http_code} size:%{size_download}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/generate -H 'Content-Type: application/json' -d '{\"ssid\":\"HomeNetwork\",\"password\":\"mypass123\",\"auth_type\":\"WPA\",\"format\":\"3mf\"}' -o /tmp/wifi3d-test.3mf -w '%{http_code} size:%{size_download}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/preview -H 'Content-Type: application/json' -d '{\"ssid\":\"HomeNet\",\"password\":\"\",\"auth_type\":\"WPA\"}')",
+      "Bash(curl -s -o /dev/null -w \"app.js: %{http_code}\\\\n\" http://localhost:8000/static/app.js)",
+      "Bash(curl -s -o /dev/null -w \"styles.css: %{http_code}\\\\n\" http://localhost:8000/static/styles.css)",
+      "Bash(curl -s -X POST http://localhost:8000/api/preview -H 'Content-Type: application/json' -d '{\"ssid\":\"HomeNet\",\"password\":\"\",\"auth_type\":\"WPA\",\"module_color_hex\":\"#1a1a1a\"}' -w '\\\\nHTTP: %{http_code}')",
+      "Bash(curl *)"
+    ]
+  }
+}

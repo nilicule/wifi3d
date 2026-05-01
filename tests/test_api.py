@@ -4,14 +4,14 @@ from backend.main import app
 client = TestClient(app)
 
 
-def test_generate_stl_returns_binary():
+def test_generate_stl_returns_zip():
     resp = client.post("/api/generate", json={
         "ssid": "TestNet", "password": "pw", "auth_type": "WPA",
         "format": "stl"
     })
     assert resp.status_code == 200
-    assert resp.headers["content-type"] == "application/octet-stream"
-    assert len(resp.content) > 84
+    assert resp.headers["content-type"] == "application/zip"
+    assert resp.content[:2] == b"PK"
 
 
 def test_generate_3mf_returns_zip():

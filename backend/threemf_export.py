@@ -20,7 +20,13 @@ _RELS = """\
 </Relationships>"""
 
 
-def _mesh_to_xml(verts: np.ndarray, faces: np.ndarray, obj_id: int, color: str) -> str:
+def _mesh_to_xml(
+    verts: np.ndarray,
+    faces: np.ndarray,
+    obj_id: int,
+    mat_group_id: int,
+    pindex: int,
+) -> str:
     vertex_lines = "\n".join(
         f'          <vertex x="{v[0]:.4f}" y="{v[1]:.4f}" z="{v[2]:.4f}"/>'
         for v in verts
@@ -29,9 +35,7 @@ def _mesh_to_xml(verts: np.ndarray, faces: np.ndarray, obj_id: int, color: str) 
         f'          <triangle v1="{f[0]}" v2="{f[1]}" v3="{f[2]}"/>'
         for f in faces
     )
-    h = color.lstrip("#")
-    color_attr = f"#{h}FF"
-    return f"""  <object id="{obj_id}" type="model" p:color="{color_attr}">
+    return f"""  <object id="{obj_id}" type="model" pid="{mat_group_id}" pindex="{pindex}">
     <mesh>
       <vertices>
 {vertex_lines}
@@ -44,20 +48,34 @@ def _mesh_to_xml(verts: np.ndarray, faces: np.ndarray, obj_id: int, color: str) 
 
 
 def export_3mf(mesh: MeshPair, base_color: str, module_color: str) -> bytes:
-    plate_xml = _mesh_to_xml(mesh.plate_verts, mesh.plate_faces, 1, base_color)
-    mod_xml = _mesh_to_xml(mesh.mod_verts, mesh.mod_faces, 2, module_color)
+    base_hex = base_color.lstrip("#")
+    mod_hex = module_color.lstrip("#")
+
+    # Materials group (id=1): index 0 = base plate color, index 1 = module color.
+    # m:basematerials is the 3MF Materials Extension; slicers use displaycolor for
+    # per-object colour in the viewport and when assigning filaments.
+    materials_xml = (
+        f'  <m:basematerials id="1">\n'
+        f'    <m:base name="Base" displaycolor="#{base_hex}"/>\n'
+        f'    <m:base name="Modules" displaycolor="#{mod_hex}"/>\n'
+        f'  </m:basematerials>'
+    )
+
+    plate_xml = _mesh_to_xml(mesh.plate_verts, mesh.plate_faces, 2, 1, 0)
+    mod_xml = _mesh_to_xml(mesh.mod_verts, mesh.mod_faces, 3, 1, 1)
 
     model_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter"
   xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
-  xmlns:p="http://schemas.microsoft.com/3dmanufacturing/production/2015/06">
+  xmlns:m="http://schemas.microsoft.com/3dmanufacturing/material/2015/02">
   <resources>
+{materials_xml}
 {plate_xml}
 {mod_xml}
   </resources>
   <build>
-    <item objectid="1"/>
     <item objectid="2"/>
+    <item objectid="3"/>
   </build>
 </model>"""
 

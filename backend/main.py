@@ -29,8 +29,8 @@ async def generate(req: GenerateRequest) -> Response:
         data = export_stl(mesh)
         return Response(
             content=data,
-            media_type="application/octet-stream",
-            headers={"Content-Disposition": f'attachment; filename="wifi3d-{slug}.stl"'},
+            media_type="application/zip",
+            headers={"Content-Disposition": f'attachment; filename="wifi3d-{slug}.zip"'},
         )
     else:
         data = export_3mf(mesh, req.base_color_hex, req.module_color_hex)
