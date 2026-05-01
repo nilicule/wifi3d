@@ -144,27 +144,46 @@ document.getElementById('password').addEventListener('input', e => {
 });
 
 // Size presets
+function activateSizeBtn(active) {
+  document.querySelectorAll('.size-btn').forEach(b => {
+    const on = b === active;
+    b.classList.toggle('border-accent', on);
+    b.classList.toggle('bg-accent/10', on);
+    b.classList.toggle('text-accent', on);
+    b.classList.toggle('border-gray-700', !on);
+  });
+}
+
+function setCustomVisible(show) {
+  const row = document.getElementById('custom-size-row');
+  row.classList.toggle('hidden', !show);
+  row.classList.toggle('flex', show);
+  const customBtn = document.getElementById('btn-custom-size');
+  customBtn.classList.toggle('border-accent', show);
+  customBtn.classList.toggle('bg-accent/10', show);
+  customBtn.classList.toggle('text-accent', show);
+  customBtn.classList.toggle('border-gray-700', !show);
+}
+
 document.querySelectorAll('.size-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.size-btn').forEach(b => {
-      b.classList.remove('border-accent', 'bg-accent/10', 'text-accent');
-      b.classList.add('border-gray-700');
-    });
-    btn.classList.remove('border-gray-700');
-    btn.classList.add('border-accent', 'bg-accent/10', 'text-accent');
+    setCustomVisible(false);
+    activateSizeBtn(btn);
     state.qr_size_mm = parseInt(btn.dataset.size, 10);
     schedulePreview();
   });
 });
 
+document.getElementById('btn-custom-size').addEventListener('click', () => {
+  setCustomVisible(true);
+  activateSizeBtn(null);
+  document.getElementById('custom-size').focus();
+});
+
 document.getElementById('custom-size').addEventListener('input', e => {
   const v = parseInt(e.target.value, 10);
-  if (v >= 30 && v <= 150) {
+  if (v >= 50 && v <= 150) {
     state.qr_size_mm = v;
-    document.querySelectorAll('.size-btn').forEach(b => {
-      b.classList.remove('border-accent', 'bg-accent/10', 'text-accent');
-      b.classList.add('border-gray-700');
-    });
     schedulePreview();
   }
 });
@@ -205,7 +224,7 @@ document.getElementById('btn-stl').addEventListener('click', () => doExport('stl
 document.getElementById('btn-3mf').addEventListener('click', () => doExport('3mf'));
 
 document.getElementById('btn-reset').addEventListener('click', () => {
-  ['ssid', 'password', 'header-text', 'sub-label'].forEach(id => {
+  ['ssid', 'password', 'header-text', 'sub-label', 'custom-size'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -214,6 +233,8 @@ document.getElementById('btn-reset').addEventListener('click', () => {
     qr_size_mm: 60, base_color_hex: '#ffffff', module_color_hex: '#1a1a1a',
     header_text: '', sub_label: '', wifi_icon: true, desk_stand_tab: false,
   });
+  setCustomVisible(false);
+  activateSizeBtn(document.querySelector('.size-btn[data-size="60"]'));
   clearPreview();
   updateExportButtons();
 });

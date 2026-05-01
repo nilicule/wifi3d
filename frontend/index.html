@@ -159,17 +159,32 @@
         <div id="step2-body" class="accordion-body px-5 pb-5 flex flex-col gap-4">
 
           <!-- Size presets -->
-          <div class="flex flex-col gap-1.5 text-sm">
-            <span class="text-gray-400 font-medium">QR Size</span>
-            <div class="flex gap-2 flex-wrap">
-              <button class="size-btn px-3 py-1.5 rounded-lg border border-gray-700 text-sm hover:border-accent transition-colors" data-size="50">50mm</button>
-              <button class="size-btn px-3 py-1.5 rounded-lg border border-accent bg-accent/10 text-accent text-sm" data-size="60">60mm</button>
-              <button class="size-btn px-3 py-1.5 rounded-lg border border-gray-700 text-sm hover:border-accent transition-colors" data-size="70">70mm</button>
-              <div class="flex items-center gap-1.5">
-                <input id="custom-size" type="number" min="30" max="150" placeholder="mm"
-                  class="w-16 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-accent" />
-              </div>
+          <div class="flex flex-col gap-2 text-sm">
+            <span class="text-gray-400 font-medium">QR Code Size</span>
+            <div class="flex gap-2">
+              <button class="size-btn flex-1 py-2 rounded-lg border border-gray-700 hover:border-accent transition-colors text-center leading-tight" data-size="50">
+                <span class="block font-medium">50×50</span>
+                <span class="block text-xs text-gray-500">mm</span>
+              </button>
+              <button class="size-btn flex-1 py-2 rounded-lg border border-accent bg-accent/10 text-accent transition-colors text-center leading-tight" data-size="60">
+                <span class="block font-medium">60×60</span>
+                <span class="block text-xs opacity-70">mm</span>
+              </button>
+              <button class="size-btn flex-1 py-2 rounded-lg border border-gray-700 hover:border-accent transition-colors text-center leading-tight" data-size="70">
+                <span class="block font-medium">70×70</span>
+                <span class="block text-xs text-gray-500">mm</span>
+              </button>
+              <button id="btn-custom-size" class="flex-1 py-2 rounded-lg border border-gray-700 hover:border-accent transition-colors text-center leading-tight">
+                <span class="block font-medium">Custom</span>
+                <span class="block text-xs text-gray-500">mm</span>
+              </button>
             </div>
+            <div id="custom-size-row" class="hidden flex-col gap-1">
+              <label class="text-xs text-gray-400">Size (mm) · min 50</label>
+              <input id="custom-size" type="number" min="50" max="150" placeholder="60"
+                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+            </div>
+            <p class="text-xs text-gray-600">Plate grows automatically when adding header or label text</p>
           </div>
 
           <!-- Colors -->
