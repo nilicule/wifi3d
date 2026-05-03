@@ -52,14 +52,26 @@ def _merge(parts: list[tuple[np.ndarray, np.ndarray]]) -> tuple[np.ndarray, np.n
     return np.concatenate(all_verts), np.concatenate(all_faces)
 
 
+_BOLD_FONT_CANDIDATES = [
+    ("/System/Library/Fonts/Helvetica.ttc", 1),
+    ("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 0),
+    ("/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", 0),
+]
+
+
 def _rasterize_text(text: str, height_mm: float, width_mm: float) -> np.ndarray:
     h_px = int(height_mm * TEXT_DPI)
     w_px = int(width_mm * TEXT_DPI)
     img = Image.new("L", (w_px, h_px), color=255)
     draw = ImageDraw.Draw(img)
-    try:
-        font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", size=int(h_px * 0.75))
-    except Exception:
+    font = None
+    for path, index in _BOLD_FONT_CANDIDATES:
+        try:
+            font = ImageFont.truetype(path, size=int(h_px * 0.75), index=index)
+            break
+        except Exception:
+            continue
+    if font is None:
         font = ImageFont.load_default()
     bbox = draw.textbbox((0, 0), text, font=font)
     text_w = bbox[2] - bbox[0]
